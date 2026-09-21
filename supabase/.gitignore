@@ -2,6 +2,9 @@
 .branches
 .temp
 
+# Local-only dev admin seed (contains a password hash). Copy seed.admin.sql.example.
+seed.admin.sql
+
 # dotenvx
 .env.keys
 .env.local

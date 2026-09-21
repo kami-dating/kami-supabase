@@ -1,0 +1,3 @@
+-- Shared seed data. Runs on `supabase db reset` (local only; never on preview or production).
+-- v0.1 has no tables, so there is nothing to seed here yet.
+-- The local dev admin lives in seed.admin.sql (gitignored, see seed.admin.sql.example).

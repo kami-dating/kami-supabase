@@ -1,0 +1,32 @@
+-- Local dev admin. Runs on `supabase db reset` only; never on preview or production.
+--
+-- Setup: copy this file to seed.admin.sql (gitignored) and replace the placeholder
+-- below with a bcrypt hash of a throwaway password (see README, "Dev admin account").
+-- Never commit a real password hash.
+
+do $$
+declare
+  admin_id uuid := gen_random_uuid();
+  admin_email text := 'admin@kami.lgbt';
+  admin_hash text := 'PASTE_BCRYPT_HASH_HERE';
+begin
+  insert into auth.users (
+    instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+    raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+    confirmation_token, recovery_token, email_change_token_new, email_change
+  ) values (
+    '00000000-0000-0000-0000-000000000000', admin_id, 'authenticated', 'authenticated',
+    admin_email, admin_hash, now(),
+    '{"provider": "email", "providers": ["email"], "kami_role": "admin"}',
+    '{}', now(), now(),
+    '', '', '', ''
+  );
+
+  insert into auth.identities (
+    id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at
+  ) values (
+    gen_random_uuid(), admin_id, admin_id::text, 'email',
+    jsonb_build_object('sub', admin_id::text, 'email', admin_email, 'email_verified', true),
+    now(), now(), now()
+  );
+end $$;
